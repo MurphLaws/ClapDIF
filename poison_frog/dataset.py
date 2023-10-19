@@ -135,7 +135,7 @@ def create_sanitized_dataset(target_class: int, new_class: int) -> None:
 
     print("[ Load doggos ]")
     for file in tqdm(os.listdir(train_path+"dog/")):
-        image = imread(train_path+"dog/"+file, pilmode="RGB", as_gray=False)
+        image = imread(train_path+"dog/"+file, pilmode="RGB")
         # check if image dimensions are corrent for the network
         if image.shape[-1] == 3 and image.ndim == 3:
             # move the channel dimension, as pytorch requires the channel dim to be the first dim
@@ -146,7 +146,7 @@ def create_sanitized_dataset(target_class: int, new_class: int) -> None:
             dog_len += 1
 
     for file in tqdm(os.listdir(test_path+"dog/")):
-        image = imread(test_path+"dog/"+file, pilmode="RGB", as_gray=False)
+        image = imread(test_path+"dog/"+file, pilmode="RGB")
         # check if image dimensions are corrent for the network
         if image.shape[-1] == 3 and image.ndim == 3:
             # move the channel dimension, as pytorch requires the channel dim to be the first dim
@@ -158,7 +158,7 @@ def create_sanitized_dataset(target_class: int, new_class: int) -> None:
 
     print("[ Load fishes ]")
     for file in tqdm(os.listdir(train_path+"fish/")):
-        image = imread(train_path+"fish/"+file, pilmode="RGB", as_gray=False)
+        image = imread(train_path+"fish/"+file, pilmode="RGB")
         # check if image dimensions are corrent for the network
         if image.shape[-1] == 3 and image.ndim == 3:
             # move the channel dimension, as pytorch requires the channel dim to be the first dim
@@ -169,7 +169,7 @@ def create_sanitized_dataset(target_class: int, new_class: int) -> None:
             fish_len += 1
 
     for file in tqdm(os.listdir(test_path+"fish/")):
-        image = imread(test_path+"fish/"+file, pilmode="RGB", as_gray=False)
+        image = imread(test_path+"fish/"+file, pilmode="RGB")
         # check if image dimensions are corrent for the network
         if image.shape[-1] == 3 and image.ndim == 3:
             # move the channel dimension, as pytorch requires the channel dim to be the first dim
