@@ -14,7 +14,7 @@ import torchvision.transforms as transforms
 # from sklearn.model_selection import train_test_split
 from imageio import imread
 
-
+#KEEP
 class TensorDataset(Dataset):
     """custom TensorDataset class which inherits from Pytorchs Dataset class
        and applies a specified transform to all dataset items.
@@ -37,6 +37,8 @@ class TensorDataset(Dataset):
     def __len__(self):
         return self.tensors[0].size(0)
 
+
+## TO CHANGE
 
 def get_data() -> DataLoader:
     """
@@ -74,6 +76,8 @@ def get_data() -> DataLoader:
     return train_loader, test_loader, test_loader2
 
 
+
+##FORWARD STEP KEEP
 def forward_step(model: nn.Sequential, img: torch.Tensor, target_image: torch.Tensor,
                  lr: float, target_logits) -> torch.Tensor:
     """helper function performing the forward step"""
@@ -90,6 +94,7 @@ def forward_step(model: nn.Sequential, img: torch.Tensor, target_image: torch.Te
     return perturbed_img
 
 
+#BACKWARD STEP KEEP
 def backward_step(img: torch.Tensor, base_img: torch.Tensor, lr: float, beta: float) -> torch.Tensor:
     """helper function to perform the backward step"""
     perturbed_img = (img + lr*beta*base_img) / (1 + beta*lr)
@@ -97,6 +102,8 @@ def backward_step(img: torch.Tensor, base_img: torch.Tensor, lr: float, beta: fl
 
     return perturbed_img
 
+
+## NOT NECCESSARY
 def adam_one_step(model, m, v, t, currentImage, featRepTarget, learning_rate,
                   beta_1=0.9, beta_2=0.999, eps=1e-8) -> torch.Tensor:
     """one step adam optimization"""
@@ -133,6 +140,8 @@ def create_sanitized_dataset(target_class: int, new_class: int) -> None:
     dog_len_test = 0
     fish_len_test = 0
 
+
+##CAN CHANGE
     print("[ Load doggos ]")
     for file in tqdm(os.listdir(train_path+"dog/")):
         image = imread(train_path+"dog/"+file, pilmode="RGB")
@@ -345,6 +354,10 @@ def create_perturbed_dataset(target_class: int, new_class: int, attack_iters: in
                 poisoned_labels[current_pertube_count] = target
                 current_pertube_count += 1
 
+    print("poisoned_images shape: ", poisoned_images.shape)
+    print("poisoned_labels shape: ", poisoned_labels.shape)
+
+    
 
     print("\n[ Saving Dataset ]")
     # check for existing path and save the dataset
