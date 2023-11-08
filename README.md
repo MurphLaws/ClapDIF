@@ -1,4 +1,4 @@
-# Poison_Froggo
+# ClapDIF
 re-implementation of the poison frogs! paper in PyTorch by Shafahi et al.:
 * [Arxiv](https://arxiv.org/abs/1804.00792)
 * [Github](https://github.com/ashafahi/inceptionv3-transferLearn-poison)
