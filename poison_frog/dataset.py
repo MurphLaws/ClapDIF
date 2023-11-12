@@ -57,13 +57,13 @@ def get_data() -> DataLoader:
     test_labels = torch.load(os.path.join(data_path, "sanitized_labels_test"))
 
     train_dataset = TensorDataset(train_data, train_labels, transform=transforms.Compose([
-                transforms.RandomResizedCrop(299),
+                transforms.RandomResizedCrop(32),
                 transforms.RandomHorizontalFlip(),
                 #transforms.ToTensor(),
                 normalize]))
 
     test_dataset = TensorDataset(test_data, test_labels, transform=transforms.Compose([
-                transforms.Resize(299),
+                transforms.Resize(32),
                 transforms.ToTensor(),
                 normalize]))
 
@@ -149,7 +149,7 @@ def create_sanitized_dataset(target_class: int, new_class: int) -> None:
         if image.shape[-1] == 3 and image.ndim == 3:
             # move the channel dimension, as pytorch requires the channel dim to be the first dim
             # and resize the image to fit the input of 299x299 for inception_v3
-            image = Image.fromarray(image).resize((299, 299))
+            image = Image.fromarray(image).resize((32, 32))
             image = np.moveaxis(np.array(image), -1, -3)
             train_data.append(image)
             dog_len += 1
@@ -160,7 +160,7 @@ def create_sanitized_dataset(target_class: int, new_class: int) -> None:
         if image.shape[-1] == 3 and image.ndim == 3:
             # move the channel dimension, as pytorch requires the channel dim to be the first dim
             # and resize the image to fit the input of 299x299 for inception_v3
-            image = Image.fromarray(image).resize((299, 299))
+            image = Image.fromarray(image).resize((32, 32))
             image = np.moveaxis(np.array(image), -1, -3)
             test_data.append(image)
             dog_len_test += 1
@@ -172,7 +172,7 @@ def create_sanitized_dataset(target_class: int, new_class: int) -> None:
         if image.shape[-1] == 3 and image.ndim == 3:
             # move the channel dimension, as pytorch requires the channel dim to be the first dim
             # and resize the image to fit the input of 299x299 for inception_v3
-            image = Image.fromarray(image).resize((299, 299))
+            image = Image.fromarray(image).resize((32, 32))
             image = np.moveaxis(np.array(image), -1, -3)
             train_data.append(image)
             fish_len += 1
@@ -183,7 +183,7 @@ def create_sanitized_dataset(target_class: int, new_class: int) -> None:
         if image.shape[-1] == 3 and image.ndim == 3:
             # move the channel dimension, as pytorch requires the channel dim to be the first dim
             # and resize the image to fit the input of 299x299 for inception_v3
-            image = Image.fromarray(image).resize((299, 299))
+            image = Image.fromarray(image).resize((32, 32))
             image = np.moveaxis(np.array(image), -1, -3)
             test_data.append(image)
             fish_len_test += 1
@@ -245,7 +245,7 @@ def create_perturbed_dataset(target_class: int, new_class: int, attack_iters: in
     train_images = torch.load(os.path.join(data_path, "sanitized_images"))
     train_labels = torch.load(os.path.join(data_path, "sanitized_labels"))
 
-    poisoned_images = torch.zeros((num_poisons, 3, 299, 299))
+    poisoned_images = torch.zeros((num_poisons, 3, 32, 32))
     poisoned_labels = torch.zeros((num_poisons))
 
     print("[ Building new Dataset.. ]")
@@ -265,7 +265,7 @@ def create_perturbed_dataset(target_class: int, new_class: int, attack_iters: in
 
     # calculate the beta
     img_shape = np.squeeze(target_image).shape
-    beta = 0.25 * (2048 / float(img_shape[0] * img_shape[1] * img_shape[2]))**2
+    beta = 0.25* (2048 / float(img_shape[0] * img_shape[1] * img_shape[2]))**2
     print("beta = {}".format(beta))
 
     # iterate over the whole test dataset and create a perturbed version of one (or N)
@@ -290,7 +290,7 @@ def create_perturbed_dataset(target_class: int, new_class: int, attack_iters: in
             old_obj = torch.linalg.norm(old_feat_rep - target_feat_rep) + \
                       beta*torch.linalg.norm(old_image - base_image)
             last_m_objs.append(old_obj)
-            obj_threshold = 2.9
+            obj_threshold = 0.7
 
             # perform the attack as described in the paper to optimize
             # || f(x)-f(t) ||^2 + beta * || x-b ||^2

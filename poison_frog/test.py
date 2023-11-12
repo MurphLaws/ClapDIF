@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader
 import torchvision.transforms as transforms
 import torchvision.models as models
 from .dataset import TensorDataset
+from Helpers.nicolas import Resnet20Model
 
 
 def get_loader() -> DataLoader:
@@ -19,7 +20,7 @@ def get_loader() -> DataLoader:
     test_labels = torch.load(os.path.join(data_path, "sanitized_labels_test"))
 
     test_dataset = TensorDataset(test_data, test_labels, transform=transforms.Compose([
-                transforms.Resize(299),
+                transforms.Resize(32),
                 transforms.ToTensor(),
                 normalize]))
 
@@ -36,7 +37,7 @@ def test_model(device_name: str, target_id: int, new_class: int) -> bool:
     device = device_name
     test_loader = get_loader()
 
-    model = models.inception_v3(pretrained=True)
+    model = Resnet20Model(num_classes=10)
     model.aux_logits = False
     checkpoint = torch.load('./poison_frog/model_saves/poisoned_model',
                             map_location=lambda storage, loc: storage)

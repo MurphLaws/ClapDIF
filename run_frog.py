@@ -16,6 +16,7 @@ import torchvision.models as models
 from poison_frog.dataset import create_perturbed_dataset, create_sanitized_dataset
 from poison_frog.train import train
 from poison_frog.test import test_model
+from Helpers.nicolas import Resnet20Model
 
 torch.backends.cudnn.benchmark = True
 ATTACK_ITERS = 1500
@@ -31,7 +32,7 @@ def get_model(device: str) -> nn.Sequential:
 
     :return: returns the loaded model
     """
-    model = models.inception_v3(pretrained=True)
+    model = Resnet20Model(num_classes=10)
     model.aux_logits = False
     model.eval()
     model = model.to(device)

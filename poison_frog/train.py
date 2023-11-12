@@ -10,6 +10,7 @@ from torch.utils.data import DataLoader
 import numpy as np
 import pkbar
 from .dataset import TensorDataset
+from Helpers.nicolas import Resnet20Model
 
 def save_model(net: nn.Sequential, poisoned: bool) -> None:
     """
@@ -81,13 +82,13 @@ def get_loaders(poisoned: bool, data_augmentation: bool, batch_size: int = 32) -
         test_labels = torch.load(os.path.join(data_path, "sanitized_labels_test"))
 
     train_dataset = TensorDataset(train_data, train_labels, transform=transforms.Compose([
-                transforms.RandomResizedCrop(299),
+                transforms.RandomResizedCrop(32),
                 transforms.RandomHorizontalFlip(),
                 #transforms.ToTensor(),
                 normalize]))
 
     test_dataset = TensorDataset(test_data, test_labels, transform=transforms.Compose([
-                transforms.Resize(299),
+                transforms.Resize(32),
                 #transforms.ToTensor(),
                 normalize]))
 
@@ -106,10 +107,10 @@ def get_model(use_transfer: bool) -> nn.Sequential:
     :return: returns the loaded model
     """
     if use_transfer:
-        net = models.inception_v3(pretrained=True, progress=True)
+        net = Resnet20Model(num_classes=10)
         net.aux_logits = False
     else:
-        net = models.inception_v3()
+        net = Resnet20Model(num_classes=10)
         net.aux_logits = False
 
     net = net.to(device)
