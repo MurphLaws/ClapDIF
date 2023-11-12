@@ -1,7 +1,7 @@
 import torch
 from torch import nn
 from typing import List
-from model_train import train
+from .model_train import train
 from pathlib import Path
 from torch.utils.data import DataLoader, Subset
 from sklearn.model_selection import train_test_split
