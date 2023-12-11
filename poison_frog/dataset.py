@@ -142,9 +142,9 @@ def create_sanitized_dataset(target_class: int, new_class: int) -> None:
 
 
 ##CAN CHANGE
-    print("[ Load doggos ]")
-    for file in tqdm(os.listdir(train_path+"dog/")):
-        image = imread(train_path+"dog/"+file, pilmode="RGB")
+    print("[ Load  Class 1 ]") #Before, Doggos
+    for file in tqdm(os.listdir(train_path+"class1/")):
+        image = imread(train_path+"class1/"+file, pilmode="RGB")
         # check if image dimensions are corrent for the network
         if image.shape[-1] == 3 and image.ndim == 3:
             # move the channel dimension, as pytorch requires the channel dim to be the first dim
@@ -154,8 +154,8 @@ def create_sanitized_dataset(target_class: int, new_class: int) -> None:
             train_data.append(image)
             dog_len += 1
 
-    for file in tqdm(os.listdir(test_path+"dog/")):
-        image = imread(test_path+"dog/"+file, pilmode="RGB")
+    for file in tqdm(os.listdir(test_path+"class1/")):
+        image = imread(test_path+"class1/"+file, pilmode="RGB")
         # check if image dimensions are corrent for the network
         if image.shape[-1] == 3 and image.ndim == 3:
             # move the channel dimension, as pytorch requires the channel dim to be the first dim
@@ -165,9 +165,9 @@ def create_sanitized_dataset(target_class: int, new_class: int) -> None:
             test_data.append(image)
             dog_len_test += 1
 
-    print("[ Load fishes ]")
-    for file in tqdm(os.listdir(train_path+"fish/")):
-        image = imread(train_path+"fish/"+file, pilmode="RGB")
+    print("[ Load Class 0 ]") #Before, Fish
+    for file in tqdm(os.listdir(train_path+"class0/")):
+        image = imread(train_path+"class0/"+file, pilmode="RGB")
         # check if image dimensions are corrent for the network
         if image.shape[-1] == 3 and image.ndim == 3:
             # move the channel dimension, as pytorch requires the channel dim to be the first dim
@@ -177,8 +177,8 @@ def create_sanitized_dataset(target_class: int, new_class: int) -> None:
             train_data.append(image)
             fish_len += 1
 
-    for file in tqdm(os.listdir(test_path+"fish/")):
-        image = imread(test_path+"fish/"+file, pilmode="RGB")
+    for file in tqdm(os.listdir(test_path+"class0/")):
+        image = imread(test_path+"class0/"+file, pilmode="RGB")
         # check if image dimensions are corrent for the network
         if image.shape[-1] == 3 and image.ndim == 3:
             # move the channel dimension, as pytorch requires the channel dim to be the first dim
