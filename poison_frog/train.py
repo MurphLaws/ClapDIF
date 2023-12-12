@@ -192,8 +192,9 @@ def train(epochs: int, learning_rate: int, poisoned: bool, batch_size: int, devi
         net_parameters = net.parameters()
 
     criterion = nn.CrossEntropyLoss()
+    
     optimizer = optim.SGD(net_parameters, lr=learning_rate, momentum=0.9, weight_decay=5e-4)
-
+    my_outputs = []
     for epoch in range(0, epochs):
         # every epoch a new progressbar is created
         # also, depending on the epoch the learning rate gets adjusted before
@@ -204,6 +205,7 @@ def train(epochs: int, learning_rate: int, poisoned: bool, batch_size: int, devi
         net.train()
         correct = 0
         total = 0
+        batch_outputs = []
         running_loss = 0.0
 
         # iterates over a batch of training data
@@ -211,12 +213,18 @@ def train(epochs: int, learning_rate: int, poisoned: bool, batch_size: int, devi
             inputs, targets = inputs.to(device), targets.to(device)
             #targets = torch.nn.functional.one_hot(targets)
             optimizer.zero_grad()
+
             outputs = net(inputs)
             loss = criterion(outputs, targets)
+
+            #Apprend 
+
             loss.backward()
 
             optimizer.step()
             _, predicted = outputs.max(1)
+
+            batch_outputs.append(predicted)
 
             # calculate the current running loss as well as the total accuracy
             # and update the progressbar accordingly
@@ -226,6 +234,8 @@ def train(epochs: int, learning_rate: int, poisoned: bool, batch_size: int, devi
 
             kbar.update(batch_idx, values=[("loss", running_loss/(batch_idx+1)),
                                            ("acc", 100. * correct / total)])
+            
+        
         # calculate the test accuracy of the network at the end of each epoch
         with torch.no_grad():
             net.eval()
@@ -239,6 +249,9 @@ def train(epochs: int, learning_rate: int, poisoned: bool, batch_size: int, devi
                 t_total += targets_t.size(0)
                 t_correct += predicted_t.eq(targets_t).sum().item()
             print("-> test acc: {}".format(100.*t_correct/t_total))
+ 
+        my_outputs.append(batch_outputs)
+    
     # save the model at the end of the training
     save_model(net, poisoned)
 
@@ -254,4 +267,20 @@ def train(epochs: int, learning_rate: int, poisoned: bool, batch_size: int, devi
             t_total += targets_t.size(0)
             t_correct += predicted_t.eq(targets_t).sum().item()
 
+    
     print("Final accuracy: Train: {} | Test: {}".format(100.*correct/total, 100.*t_correct/t_total))
+    
+
+    #write the outputs to a file called outputs.txt if the file already exits increase the number at the end by 1
+    #i = 0
+    #while os.path.exists("outputs{}.txt".format(i)):
+    #    i += 1
+    #f = open("outputs{}.txt".format(i), "w")
+    #f.write(str(my_outputs))
+    #f.close()
+    #Use torch save to save a file with the name outputs.pt, if tha file already exists increase the number at the end by 1
+    i = 0
+    while os.path.exists("outputs{}.pt".format(i)):
+        i += 1
+    torch.save(my_outputs, "outputs{}.pt".format(i))
+
