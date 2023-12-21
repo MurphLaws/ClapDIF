@@ -10,7 +10,7 @@ from Helpers.nicolas import DatasetLoaders, Resnet20Model
 from Helpers import model_train
 from poison_frog.dataset import create_perturbed_dataset
 from torchsummary import summary
-from tracin_influence-1 import checkpoints_load_func, compute_train_to_test_influence
+from Helpers.tracin_influence import checkpoints_load_func, compute_train_to_test_influence
 
 path = "poison_frog/model_saves/poisoned_model"
 
@@ -37,5 +37,6 @@ attack_images = "poison_frog/datasets/attack_images"
 dataset = torch.load(attack_images)
 
 #dataset is already loaded
+
 
 
